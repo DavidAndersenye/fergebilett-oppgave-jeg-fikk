@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .errorStyle {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Billettpriser</h1>
+    <div class="container">
+        <p>Priser: Voksen - 100 kr, Barn - 50 kr, Honnør - 60 kr</p>
+        <form id="ticketForm">
+            <label for="adults">Antall voksne:</label>
+            <input type="number" id="adults" placeholder="Antall voksne" required><br><br>
+
+            <label for="children">Antall barn:</label>
+            <input type="number" id="children" placeholder="Antall barn" required><br><br>
+
+            <label for="seniors">Antall honnør:</label>
+            <input type="number" id="seniors" placeholder="Antall honnør" required><br><br>
+
+            <label for="tripType">Velg reisetype:</label><br>
+            <input type="radio" id="oneWay" name="tripType" value="oneWay" checked>
+            <label for="oneWay">Enkeltreise</label>
+            <input type="radio" id="roundTrip" name="tripType" value="roundTrip">
+            <label for="roundTrip">Tur/retur</label><br><br>
+
+            <button type="button" onclick="calculatePrice()">Bestill billetter</button>
+        </form>
+
+        <div id="result" class="errorStyle" style="display: none;"></div>
+    </div>
+
+    <script>
+function calculatePrice() {
+    const adults = parseInt(document.getElementById('adults').value);
+    const children = parseInt(document.getElementById('children').value);
+    const seniors = parseInt(document.getElementById('seniors').value);
+    const tripType = document.querySelector('input[name="tripType"]:checked').value;
+
+    let total = 0;
+
+    switch (true) {
+        case isNaN(adults) && isNaN(children) && isNaN(seniors):
+            showError("Vennligst fyll inn minst ett av feltene");
+            return;
+        case !isNaN(adults):
+            total += adults * 100;
+            break;
+        case !isNaN(children):
+            total += children * 50;
+            break;
+        case !isNaN(seniors):
+            total += seniors * 60;
+            break;
+    }
+
+    if (tripType === 'roundTrip') {
+        total = total * 2 * 0.75;
+    }
+
+    const resultDiv = document.getElementById('result');
+    if (!isNaN(total)) {
+        resultDiv.textContent = `Totalprisen for ${adults} voksne, ${children} barn, og ${seniors} honnør, er ${total} kroner. God tur!`;
+    } else {
+        resultDiv.textContent = "Vennligst fyll inn minst ett av feltene";
+    }
+    resultDiv.style.display = 'block';
+}
+    </script>
+</body>
+</html>
